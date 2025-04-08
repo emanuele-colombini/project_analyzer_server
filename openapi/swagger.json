@@ -1,0 +1,544 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Project Analyzed API",
+    "description": "API per la gestione di progetti e business requests",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Project Analyzed Team"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Server di sviluppo locale"
+    }
+  ],
+  "tags": [
+    {
+      "name": "projects",
+      "description": "Operazioni relative ai progetti"
+    },
+    {
+      "name": "business-requests",
+      "description": "Operazioni relative alle business requests"
+    }
+  ],
+  "paths": {
+    "/projects": {
+      "get": {
+        "tags": ["projects"],
+        "summary": "Ottiene tutti i progetti",
+        "description": "Restituisce un elenco di tutti i progetti, con possibilità di filtrare solo quelli abilitati",
+        "operationId": "getAllProjects",
+        "parameters": [
+          {
+            "name": "enabled_only",
+            "in": "query",
+            "description": "Filtra solo i progetti abilitati",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operazione riuscita",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Project"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["projects"],
+        "summary": "Crea un nuovo progetto",
+        "description": "Crea un nuovo progetto con i dati forniti",
+        "operationId": "createProject",
+        "requestBody": {
+          "description": "Dati del progetto da creare",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Progetto creato con successo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{project_id}": {
+      "get": {
+        "tags": ["projects"],
+        "summary": "Ottiene un progetto specifico",
+        "description": "Restituisce i dettagli di un progetto specifico in base all'ID",
+        "operationId": "getProjectById",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "description": "ID del progetto da recuperare",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operazione riuscita",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Progetto non trovato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["projects"],
+        "summary": "Aggiorna un progetto esistente",
+        "description": "Aggiorna i dati di un progetto esistente in base all'ID",
+        "operationId": "updateProject",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "description": "ID del progetto da aggiornare",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Dati aggiornati del progetto",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Progetto aggiornato con successo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Progetto non trovato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{project_id}/disable": {
+      "patch": {
+        "tags": ["projects"],
+        "summary": "Disabilita un progetto",
+        "description": "Disabilita un progetto esistente (soft delete)",
+        "operationId": "disableProject",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "description": "ID del progetto da disabilitare",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Progetto disabilitato con successo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Progetto non trovato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{project_id}/enable": {
+      "patch": {
+        "tags": ["projects"],
+        "summary": "Abilita un progetto",
+        "description": "Abilita un progetto precedentemente disabilitato",
+        "operationId": "enableProject",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "description": "ID del progetto da abilitare",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Progetto abilitato con successo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Progetto non trovato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/business-requests/project/{project_id}/versions": {
+      "get": {
+        "tags": ["business-requests"],
+        "summary": "Ottiene tutte le versioni di una business request",
+        "description": "Restituisce tutte le versioni di una business request per un progetto specifico, ordinate dalla più recente",
+        "operationId": "getVersionsByProjectId",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "description": "ID del progetto di cui recuperare le versioni delle business requests",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operazione riuscita",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BusinessRequest"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/business-requests/{br_id}": {
+      "get": {
+        "tags": ["business-requests"],
+        "summary": "Ottiene una versione specifica di una business request",
+        "description": "Restituisce i dettagli di una versione specifica di una business request in base all'ID",
+        "operationId": "getVersionById",
+        "parameters": [
+          {
+            "name": "br_id",
+            "in": "path",
+            "description": "ID della versione della business request da recuperare",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operazione riuscita",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BusinessRequest"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Business request non trovata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/business-requests": {
+      "post": {
+        "tags": ["business-requests"],
+        "summary": "Crea una nuova versione di una business request",
+        "description": "Crea una nuova versione di una business request per un progetto specifico (diventa automaticamente la versione attiva)",
+        "operationId": "createVersion",
+        "requestBody": {
+          "description": "Dati della business request da creare",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BusinessRequestCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Business request creata con successo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BusinessRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/business-requests/{br_id}/questions": {
+      "post": {
+        "tags": ["business-requests"],
+        "summary": "Ottiene domande per una business request",
+        "description": "Ottiene domande per una versione specifica di una business request",
+        "operationId": "getQuestions",
+        "parameters": [
+          {
+            "name": "br_id",
+            "in": "path",
+            "description": "ID della versione della business request per cui ottenere le domande",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operazione riuscita",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Business request non trovata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Project": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificatore univoco del progetto"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome del progetto"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "Descrizione del progetto"
+          },
+          "creation_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data di creazione del progetto"
+          },
+          "update_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data dell'ultimo aggiornamento del progetto"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indica se il progetto è abilitato",
+            "default": true
+          },
+          "disabled_date": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Data di disabilitazione del progetto"
+          }
+        },
+        "required": ["id", "name", "creation_date", "update_date", "enabled"]
+      },
+      "ProjectCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome del progetto"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "Descrizione del progetto"
+          }
+        },
+        "required": ["name"]
+      },
+      "ProjectUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome aggiornato del progetto"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "Descrizione aggiornata del progetto"
+          }
+        },
+        "required": ["name"]
+      },
+      "BusinessRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificatore univoco della business request"
+          },
+          "project_id": {
+            "type": "string",
+            "description": "ID del progetto a cui appartiene la business request"
+          },
+          "version": {
+            "type": "integer",
+            "description": "Numero di versione della business request"
+          },
+          "content": {
+            "type": "string",
+            "nullable": true,
+            "description": "Contenuto della business request"
+          },
+          "creation_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data di creazione della versione"
+          },
+          "is_active": {
+            "type": "boolean",
+            "description": "Indica se questa è la versione attiva della business request"
+          }
+        },
+        "required": ["id", "project_id", "version", "creation_date", "is_active"]
+      },
+      "BusinessRequestCreate": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "description": "ID del progetto a cui appartiene la business request"
+          },
+          "content": {
+            "type": "string",
+            "nullable": true,
+            "description": "Contenuto della business request"
+          }
+        },
+        "required": ["project_id"]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "description": "Messaggio di errore dettagliato"
+          }
+        },
+        "required": ["detail"]
+      }
+    }
+  }
+}

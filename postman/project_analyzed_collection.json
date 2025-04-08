@@ -1,0 +1,268 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Project Analyzed API",
+    "description": "Collezione per testare le API del progetto Project Analyzed",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Projects",
+      "description": "Operazioni relative ai progetti",
+      "item": [
+        {
+          "name": "Get All Projects",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["projects"],
+              "query": [
+                {
+                  "key": "enabled_only",
+                  "value": "false",
+                  "description": "Filtra solo i progetti abilitati",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Ottiene tutti i progetti, opzionalmente filtrando per stato abilitato"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Project By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projects/:project_id",
+              "host": ["{{baseUrl}}"],
+              "path": ["projects", ":project_id"],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": "",
+                  "description": "ID del progetto da recuperare"
+                }
+              ]
+            },
+            "description": "Ottiene un progetto specifico tramite il suo ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nuovo Progetto\",\n  \"description\": \"Descrizione del nuovo progetto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["projects"]
+            },
+            "description": "Crea un nuovo progetto"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Project",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Progetto Aggiornato\",\n  \"description\": \"Descrizione aggiornata del progetto\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/projects/:project_id",
+              "host": ["{{baseUrl}}"],
+              "path": ["projects", ":project_id"],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": "",
+                  "description": "ID del progetto da aggiornare"
+                }
+              ]
+            },
+            "description": "Aggiorna un progetto esistente"
+          },
+          "response": []
+        },
+        {
+          "name": "Disable Project",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projects/:project_id/disable",
+              "host": ["{{baseUrl}}"],
+              "path": ["projects", ":project_id", "disable"],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": "",
+                  "description": "ID del progetto da disabilitare"
+                }
+              ]
+            },
+            "description": "Disabilita un progetto (soft delete)"
+          },
+          "response": []
+        },
+        {
+          "name": "Enable Project",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projects/:project_id/enable",
+              "host": ["{{baseUrl}}"],
+              "path": ["projects", ":project_id", "enable"],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": "",
+                  "description": "ID del progetto da abilitare"
+                }
+              ]
+            },
+            "description": "Abilita un progetto precedentemente disabilitato"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Business Requests",
+      "description": "Operazioni relative alle business requests",
+      "item": [
+        {
+          "name": "Get Versions By Project ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/business-requests/project/:project_id/versions",
+              "host": ["{{baseUrl}}"],
+              "path": ["business-requests", "project", ":project_id", "versions"],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": "",
+                  "description": "ID del progetto di cui recuperare le versioni delle business requests"
+                }
+              ]
+            },
+            "description": "Ottiene tutte le versioni di una business request per un progetto, ordinate dalla più recente"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Version By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/business-requests/:br_id",
+              "host": ["{{baseUrl}}"],
+              "path": ["business-requests", ":br_id"],
+              "variable": [
+                {
+                  "key": "br_id",
+                  "value": "",
+                  "description": "ID della versione della business request da recuperare"
+                }
+              ]
+            },
+            "description": "Ottiene una versione specifica di una business request tramite il suo ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Version",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"project_id\": \"project-id-here\",\n  \"content\": \"Contenuto della business request\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/business-requests",
+              "host": ["{{baseUrl}}"],
+              "path": ["business-requests"]
+            },
+            "description": "Crea una nuova versione di una business request (diventa automaticamente la versione attiva)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Questions",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/business-requests/:br_id/questions",
+              "host": ["{{baseUrl}}"],
+              "path": ["business-requests", ":br_id", "questions"],
+              "variable": [
+                {
+                  "key": "br_id",
+                  "value": "",
+                  "description": "ID della versione della business request per cui ottenere le domande"
+                }
+              ]
+            },
+            "description": "Ottiene domande per una versione specifica di una business request"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
