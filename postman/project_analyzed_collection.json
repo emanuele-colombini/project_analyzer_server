@@ -217,27 +217,29 @@
           "name": "Create Version",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"project_id\": \"project-id-here\",\n  \"content\": \"Contenuto della business request\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "project_id",
+                  "value": "project-id-here",
+                  "type": "text",
+                  "description": "ID del progetto a cui associare la business request"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "description": "File markdown (.md) contenente la business request"
                 }
-              }
+              ]
             },
             "url": {
               "raw": "{{baseUrl}}/business-requests",
               "host": ["{{baseUrl}}"],
               "path": ["business-requests"]
             },
-            "description": "Crea una nuova versione di una business request (diventa automaticamente la versione attiva)"
+            "description": "Crea una nuova versione di una business request caricando un file markdown (diventa automaticamente la versione attiva)"
           },
           "response": []
         },
@@ -259,6 +261,27 @@
               ]
             },
             "description": "Ottiene domande per una versione specifica di una business request"
+          },
+          "response": []
+        },
+        {
+          "name": "Download File",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/business-requests/:br_id/content",
+              "host": ["{{baseUrl}}"],
+              "path": ["business-requests", ":br_id", "content"],
+              "variable": [
+                {
+                  "key": "br_id",
+                  "value": "",
+                  "description": "ID della versione della business request di cui scaricare il file"
+                }
+              ]
+            },
+            "description": "Scarica il file markdown di una versione specifica di una business request"
           },
           "response": []
         }

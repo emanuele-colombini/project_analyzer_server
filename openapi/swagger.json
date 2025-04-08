@@ -341,15 +341,27 @@
       "post": {
         "tags": ["business-requests"],
         "summary": "Crea una nuova versione di una business request",
-        "description": "Crea una nuova versione di una business request per un progetto specifico (diventa automaticamente la versione attiva)",
+        "description": "Crea una nuova versione di una business request per un progetto specifico caricando un file markdown (diventa automaticamente la versione attiva)",
         "operationId": "createVersion",
         "requestBody": {
           "description": "Dati della business request da creare",
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/BusinessRequestCreate"
+                "type": "object",
+                "properties": {
+                  "project_id": {
+                    "type": "string",
+                    "description": "ID del progetto a cui appartiene la business request"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "File markdown (.md) contenente la business request"
+                  }
+                },
+                "required": ["project_id", "file"]
               }
             }
           }
@@ -361,6 +373,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BusinessRequest"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Formato file non valido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
@@ -398,6 +420,48 @@
           },
           "404": {
             "description": "Business request non trovata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/business-requests/{br_id}/content": {
+      "get": {
+        "tags": ["business-requests"],
+        "summary": "Scarica il file markdown di una business request",
+        "description": "Scarica il file markdown di una versione specifica di una business request",
+        "operationId": "downloadFile",
+        "parameters": [
+          {
+            "name": "br_id",
+            "in": "path",
+            "description": "ID della versione della business request di cui scaricare il file",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File scaricato con successo",
+            "content": {
+              "text/markdown": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Business request non trovata o file non leggibile",
             "content": {
               "application/json": {
                 "schema": {
@@ -497,10 +561,10 @@
             "type": "integer",
             "description": "Numero di versione della business request"
           },
-          "content": {
+          "file_path": {
             "type": "string",
             "nullable": true,
-            "description": "Contenuto della business request"
+            "description": "Percorso del file markdown della business request"
           },
           "creation_date": {
             "type": "string",
