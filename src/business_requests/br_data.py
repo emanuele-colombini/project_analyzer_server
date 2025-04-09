@@ -1,10 +1,11 @@
 from datetime import datetime
+from typing import List
 
 from sqlalchemy import func, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 from pydantic import BaseModel
 
-from core.database_manager import Entity
+from core.core_data import Entity
 
 
 class BusinessRequestEntity(Entity):
@@ -53,3 +54,16 @@ def to_entity(model: BusinessRequestModel) -> BusinessRequestEntity:
         creation_date=model.creation_date,
         is_active=model.is_active
     )
+
+
+class BusinessRequestEvaluationQuestion(BaseModel):
+    """Modello per rappresentare una domanda di valutazione della Business Request."""
+    id: str  # ID domanda (numerato progressivamente)
+    area: str  # Area Domanda (nome paragrafo/sezione del documento originale)
+    question: str  # Domanda da porre al cliente (formulata in modo chiaro e conciso)
+    motivation: str  # Motivazione della domanda (spiegazione del perché è necessario chiarire questo punto)
+
+
+class BusinessRequestEvaluationResult(BaseModel):
+    """Modello per rappresentare il risultato completo della valutazione della Business Request."""
+    questions: List[BusinessRequestEvaluationQuestion]  # Lista di domande di valutazione

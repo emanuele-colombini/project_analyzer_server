@@ -5,7 +5,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column
 from pydantic import BaseModel
 
-from core.database_manager import Entity
+from core.core_data import Entity
 
 
 class ProjectEntity(Entity):

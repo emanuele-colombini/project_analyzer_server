@@ -4,7 +4,7 @@ from business_requests.br_evaluator.crew import create_br_evaluator_crew
 from utils import sanitize_folder_name
 
 
-class BR_Evaluator():
+class BusinessRequestEvaluator():
     def __init__(self):
         self.evaluator_crew = None
     
@@ -20,4 +20,4 @@ class BR_Evaluator():
         return result.pydantic
 
 
-br_evaluator = BR_Evaluator()
+br_evaluator = BusinessRequestEvaluator()

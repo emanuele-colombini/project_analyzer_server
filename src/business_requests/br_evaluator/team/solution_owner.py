@@ -51,7 +51,7 @@ def create_evaluation_task(agent: Agent, project_name: str) -> Task:
         expected_output="""
             Un oggetto Pydantic EvaluationResult che contiene tutte le domande da porre al cliente, organizzate in modo strutturato e chiaro.
             
-            Ogni domanda (EvaluationQuestion) deve includere:
+            Ogni domanda (BusinessRequestEvaluationQuestion) deve includere:
             1. ID domanda (formato "Q001", "Q002", ecc.)
             2. Area Domanda (nome paragrafo/sezione del documento originale)
             3. Domanda da porre al cliente (formulata in modo chiaro e conciso, mantenendo la lingua identificata dalle business request fornite)

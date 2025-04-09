@@ -1,5 +1,5 @@
 import os
-from typing import List, Optional
+from typing import List, Optional, Sequence
 from uuid import uuid4
 from datetime import datetime
 
@@ -11,32 +11,36 @@ from utils import sanitize_folder_name
 
 
 class ProjectsService:
-    
-    async def get_all_projects(self, session: AsyncSession, enabled_only: bool = False) -> List[ProjectModel]:
-        """Get all projects, optionally filtering by enabled status"""
+
+    async def _get_all_projects(self, session: AsyncSession, enabled_only: bool = False) -> Sequence[ProjectEntity]:
         query = select(ProjectEntity)
         if enabled_only:
             query = query.where(ProjectEntity.enabled == True)
-        
+
         result = await session.execute(query)
-        entities = result.scalars().all()
-        return [to_model(entity) for entity in entities]
-    
-    async def get_project_by_id(self, session: AsyncSession, project_id: str) -> Optional[ProjectModel]:
-        """Get a project by its ID"""
+        return result.scalars().all()
+
+    async def _get_project_entity_by_id(self, session: AsyncSession, project_id: str) -> Optional[ProjectEntity]:
         result = await session.execute(
             select(ProjectEntity).where(ProjectEntity.id == project_id)
         )
-        entity = result.scalars().first()
+        return result.scalars().first()
+
+    async def get_all_projects(self, session: AsyncSession, enabled_only: bool = False) -> List[ProjectModel]:
+        """Get all projects, optionally filtering by enabled status"""
+        entities = await self._get_all_projects(session, enabled_only)
+        return [to_model(entity) for entity in entities]
+
+    async def get_project_by_id(self, session: AsyncSession, project_id: str) -> Optional[ProjectModel]:
+        """Get a project by its ID"""
+        entity = await self._get_project_entity_by_id(session, project_id)
         return to_model(entity) if entity else None
     
     async def create_project(self, session: AsyncSession, project_create: ProjectCreate) -> ProjectModel:
         """Create a new project"""
         
         # Usa il percorso assoluto alla root del progetto invece del percorso relativo al file
-        root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         project_folder = os.path.join(
-            root_dir,
             'data/projects', 
             sanitize_folder_name(project_create.name)
         )
@@ -64,11 +68,7 @@ class ProjectsService:
     
     async def update_project(self, session: AsyncSession, project_id: str, project_update: ProjectUpdate) -> Optional[ProjectModel]:
         """Update an existing project"""
-        result = await session.execute(
-            select(ProjectEntity).where(ProjectEntity.id == project_id)
-        )
-        entity = result.scalars().first()
-        
+        entity = await self._get_project_entity_by_id(session, project_id)
         if not entity:
             return None
         
@@ -83,13 +83,7 @@ class ProjectsService:
     
     async def disable_project(self, session: AsyncSession, project_id: str) -> Optional[ProjectModel]:
         """Disable a project (soft delete)"""
-        from datetime import datetime
-        
-        result = await session.execute(
-            select(ProjectEntity).where(ProjectEntity.id == project_id)
-        )
-        entity = result.scalars().first()
-        
+        entity = await self._get_project_entity_by_id(session, project_id)
         if not entity:
             return None
         
@@ -102,11 +96,7 @@ class ProjectsService:
     
     async def enable_project(self, session: AsyncSession, project_id: str) -> Optional[ProjectModel]:
         """Enable a previously disabled project"""
-        result = await session.execute(
-            select(ProjectEntity).where(ProjectEntity.id == project_id)
-        )
-        entity = result.scalars().first()
-        
+        entity = await self._get_project_entity_by_id(session, project_id)
         if not entity:
             return None
         

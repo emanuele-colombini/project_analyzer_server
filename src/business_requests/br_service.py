@@ -1,5 +1,5 @@
 import os
-from typing import List, Optional
+from typing import List, Optional, Any, Coroutine, Sequence
 from uuid import uuid4
 from datetime import datetime
 
@@ -7,30 +7,36 @@ from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import UploadFile
 
-from business_requests.br_evaluator.br_evaluator import br_evaluator
-from business_requests.br_evaluator.models import EvaluationResult
 from business_requests.br_data import BusinessRequestEntity, BusinessRequestModel, BusinessRequestCreate, to_model, to_entity
 from projects.projects_service import projects_service
 
 
 class BusinessRequestService:
-    
-    async def get_versions_by_project_id(self, session: AsyncSession, project_id: str) -> List[BusinessRequestModel]:
-        """Get all versions of a business request for a project, ordered by most recent first"""
-        query = select(BusinessRequestEntity).where(
-            BusinessRequestEntity.project_id == project_id
-        ).order_by(desc(BusinessRequestEntity.creation_date))
-        
-        result = await session.execute(query)
-        entities = result.scalars().all()
-        return [to_model(entity) for entity in entities]
-    
-    async def get_version_by_id(self, session: AsyncSession, br_id: str) -> Optional[BusinessRequestModel]:
+
+    async def _get_version_entity_by_id(self, session: AsyncSession, br_id: str) -> Optional[BusinessRequestEntity]:
         """Get a specific version of a business request by its ID"""
         result = await session.execute(
             select(BusinessRequestEntity).where(BusinessRequestEntity.id == br_id)
         )
-        entity = result.scalars().first()
+        return result.scalars().first()
+
+    async def _get_versions_entity_by_project_id(self, session: AsyncSession, project_id: str) -> Sequence[BusinessRequestEntity]:
+        query = select(BusinessRequestEntity).where(
+            BusinessRequestEntity.project_id == project_id
+        ).order_by(
+            desc(BusinessRequestEntity.creation_date)
+        )
+        result = await session.execute(query)
+        return result.scalars().all()
+
+    async def get_versions_by_project_id(self, session: AsyncSession, project_id: str) -> List[BusinessRequestModel]:
+        """Get all versions of a business request for a project, ordered by most recent first"""
+        entities = await self._get_versions_entity_by_project_id(session, project_id)
+        return [to_model(entity) for entity in entities]
+    
+    async def get_version_by_id(self, session: AsyncSession, br_id: str) -> Optional[BusinessRequestModel]:
+        """Get a specific version of a business request by its ID"""
+        entity = await self._get_version_entity_by_id(session, br_id)
         return to_model(entity) if entity else None
     
     async def create_version(self, session: AsyncSession, br_upload: BusinessRequestCreate, file: UploadFile) -> BusinessRequestModel:
@@ -39,12 +45,12 @@ class BusinessRequestService:
         project = await projects_service.get_project_by_id(session, br_upload.project_id)
         if not project:
             raise ValueError(f"Project with ID {br_upload.project_id} not found")
-            
+
         # Get the latest version number for this project
         query = select(BusinessRequestEntity).where(
             BusinessRequestEntity.project_id == br_upload.project_id
         ).order_by(desc(BusinessRequestEntity.version))
-        
+
         result = await session.execute(query)
         latest_entity = result.scalars().first()
         
@@ -68,7 +74,7 @@ class BusinessRequestService:
             await session.flush()
         
         # Create upload directory if it doesn't exist
-        upload_dir = os.path.join(project.project_folder, 'upload')
+        upload_dir = os.path.join(os.getcwd(), project.project_folder, 'upload')
         os.makedirs(upload_dir, exist_ok=True)
         
         # Generate a unique filename
@@ -111,7 +117,11 @@ class BusinessRequestService:
             return None
             
         # Construct the full path to the file
-        file_path = os.path.join(prj.project_folder, br.file_path)
+        file_path = os.path.join(
+            os.getcwd(),
+            prj.project_folder,
+            br.file_path
+        )
         
         # Check if file exists
         if not os.path.exists(file_path):
@@ -123,7 +133,9 @@ class BusinessRequestService:
             
         return content
     
-    async def get_questions(self, session: AsyncSession, br_id: str) -> Optional[EvaluationResult]:
+    async def get_questions(self, session: AsyncSession, prj_id: str, br_id: Optional[str] = None) -> Optional[EvaluationResult]:
+
+
         br = await self.get_version_by_id(session, br_id)
         if not br:
             return None

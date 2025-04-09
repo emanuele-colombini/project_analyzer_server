@@ -1,11 +1,8 @@
 import os
 from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
-from sqlalchemy.orm import DeclarativeBase
 
-
-class Entity(DeclarativeBase):
-    pass
+from core.core_data import Entity
 
 
 class DatabaseManager:
@@ -35,6 +32,9 @@ class DatabaseManager:
 
     async def setup_entities(self):
         print('Creating tables')
+        from business_requests import br_data
+        from projects import projects_data
+
         async with self._engine.begin() as conn:
             await conn.run_sync(Entity.metadata.create_all)
 
