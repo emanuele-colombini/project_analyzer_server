@@ -4,9 +4,8 @@ from typing import List
 from fastapi import APIRouter, HTTPException, status, Depends, UploadFile, File, Form, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from business_requests.br_evaluator.models import EvaluationResult
 from core.database_manager import database_manager
-from business_requests.br_data import BusinessRequestModel, BusinessRequestCreate
+from business_requests.br_data import BusinessRequestModel, BusinessRequestCreate, BusinessRequestEvaluationResult
 from business_requests.br_service import br_service
 
 router = APIRouter(
@@ -51,7 +50,7 @@ async def create_version(project_id: str = Form(...), file: UploadFile = File(..
     return await br_service.create_version(db, br_upload, file)
 
 
-@router.post("/{br_id}/questions", response_model=EvaluationResult)
+@router.post("/{br_id}/questions", response_model=BusinessRequestEvaluationResult)
 async def get_questions(br_id: str, db: AsyncSession = Depends(get_db)):
     """Get questions for a specific version of a business request"""
     result = await br_service.get_questions(db, br_id)

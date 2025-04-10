@@ -6,6 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from pydantic import BaseModel
 
 from core.core_data import Entity
+from pydantic import BaseModel, Field
 
 
 class BusinessRequestEntity(Entity):
@@ -57,13 +58,13 @@ def to_entity(model: BusinessRequestModel) -> BusinessRequestEntity:
 
 
 class BusinessRequestEvaluationQuestion(BaseModel):
-    """Modello per rappresentare una domanda di valutazione della Business Request."""
-    id: str  # ID domanda (numerato progressivamente)
-    area: str  # Area Domanda (nome paragrafo/sezione del documento originale)
-    question: str  # Domanda da porre al cliente (formulata in modo chiaro e conciso)
-    motivation: str  # Motivazione della domanda (spiegazione del perché è necessario chiarire questo punto)
+    """Model representing a Business Request evaluation question."""
+    id: str = Field(..., description="Question ID (progressively numbered)")
+    area: str = Field(..., description="Question area (name of paragraph/section from original document)")
+    question: str = Field(..., description="Question to ask the client (formulated clearly and concisely)")
+    motivation: str = Field(..., description="Question motivation (explanation of why this point needs clarification)")
 
 
 class BusinessRequestEvaluationResult(BaseModel):
-    """Modello per rappresentare il risultato completo della valutazione della Business Request."""
-    questions: List[BusinessRequestEvaluationQuestion]  # Lista di domande di valutazione
+    """Model representing the complete result of a Business Request evaluation."""
+    questions: List[BusinessRequestEvaluationQuestion] = Field([], description="List of evaluation questions")

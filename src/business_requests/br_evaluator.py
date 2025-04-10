@@ -5,6 +5,7 @@ from utils import sanitize_folder_name
 
 
 class BusinessRequestEvaluator():
+
     def __init__(self):
         self.evaluator_crew = None
     

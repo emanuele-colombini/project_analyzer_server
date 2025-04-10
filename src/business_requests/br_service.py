@@ -1,5 +1,5 @@
 import os
-from typing import List, Optional, Any, Coroutine, Sequence
+from typing import List, Optional, Sequence
 from uuid import uuid4
 from datetime import datetime
 
@@ -7,6 +7,7 @@ from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import UploadFile
 
+from business_requests.br_evaluator import br_evaluator
 from business_requests.br_data import BusinessRequestEntity, BusinessRequestModel, BusinessRequestCreate, to_model, to_entity
 from projects.projects_service import projects_service
 
@@ -134,7 +135,6 @@ class BusinessRequestService:
         return content
     
     async def get_questions(self, session: AsyncSession, prj_id: str, br_id: Optional[str] = None) -> Optional[EvaluationResult]:
-
 
         br = await self.get_version_by_id(session, br_id)
         if not br:
