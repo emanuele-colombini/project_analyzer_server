@@ -39,33 +39,33 @@
           },
           "response": [
             {
-              "name": "File scaricato con successo",
+              "name": "Progetti recuperati con successo",
               "originalRequest": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/business-requests/:br_id/content",
+                  "raw": "{{baseUrl}}/projects?enabled_only=true",
                   "host": ["{{baseUrl}}"],
-                  "path": ["business-requests", ":br_id", "content"],
-                  "variable": [
+                  "path": ["projects"],
+                  "query": [
                     {
-                      "key": "br_id",
-                      "value": "br-456"
+                      "key": "enabled_only",
+                      "value": "true"
                     }
                   ]
                 }
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": "markdown",
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
-                  "value": "text/markdown"
+                  "value": "application/json"
                 }
               ],
               "cookie": [],
-              "body": "# Business Request\n\n## Obiettivi\n\nQuesto documento descrive i requisiti per il nuovo sistema di gestione progetti.\n\n## Requisiti funzionali\n\n1. Il sistema deve permettere la creazione e gestione di progetti\n2. Ogni progetto deve poter avere multiple versioni di business request\n3. Le business request devono essere caricate come file markdown\n\n## Utenti e ruoli\n\nIl sistema prevede i seguenti ruoli:\n\n- Amministratore\n- Project Manager\n- Business Analyst\n- Sviluppatore\n"
+              "body": "{\n  \"projects\": [\n    {\n      \"id\": \"proj-123\",\n      \"name\": \"Modernizzazione COBOL\",\n      \"description\": \"Progetto di modernizzazione di applicazioni COBOL\",\n      \"enabled\": true,\n      \"creation_date\": \"2023-05-15T09:00:00Z\"\n    },\n    {\n      \"id\": \"proj-456\",\n      \"name\": \"Sistema Gestione Auto\",\n      \"description\": \"Sistema per la gestione del parco auto aziendale\",\n      \"enabled\": true,\n      \"creation_date\": \"2023-05-16T14:30:00Z\"\n    }\n  ]\n}"
             }
           ]
         },
@@ -90,33 +90,27 @@
           },
           "response": [
             {
-              "name": "File scaricato con successo",
+              "name": "Progetto recuperato con successo",
               "originalRequest": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/business-requests/:br_id/content",
+                  "raw": "{{baseUrl}}/projects/proj-123",
                   "host": ["{{baseUrl}}"],
-                  "path": ["business-requests", ":br_id", "content"],
-                  "variable": [
-                    {
-                      "key": "br_id",
-                      "value": "br-456"
-                    }
-                  ]
+                  "path": ["projects", "proj-123"]
                 }
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": "markdown",
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
-                  "value": "text/markdown"
+                  "value": "application/json"
                 }
               ],
               "cookie": [],
-              "body": "# Business Request\n\n## Obiettivi\n\nQuesto documento descrive i requisiti per il nuovo sistema di gestione progetti.\n\n## Requisiti funzionali\n\n1. Il sistema deve permettere la creazione e gestione di progetti\n2. Ogni progetto deve poter avere multiple versioni di business request\n3. Le business request devono essere caricate come file markdown\n\n## Utenti e ruoli\n\nIl sistema prevede i seguenti ruoli:\n\n- Amministratore\n- Project Manager\n- Business Analyst\n- Sviluppatore\n"
+              "body": "{\n  \"id\": \"proj-123\",\n  \"name\": \"Modernizzazione COBOL\",\n  \"description\": \"Progetto di modernizzazione di applicazioni COBOL\",\n  \"enabled\": true,\n  \"creation_date\": \"2023-05-15T09:00:00Z\"\n}"
             }
           ]
         },
@@ -148,33 +142,36 @@
           },
           "response": [
             {
-              "name": "File scaricato con successo",
+              "name": "Progetto creato con successo",
               "originalRequest": {
-                "method": "GET",
-                "header": [],
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Nuovo Progetto\",\n  \"description\": \"Descrizione del nuovo progetto\"\n}"
+                },
                 "url": {
-                  "raw": "{{baseUrl}}/business-requests/:br_id/content",
+                  "raw": "{{baseUrl}}/projects",
                   "host": ["{{baseUrl}}"],
-                  "path": ["business-requests", ":br_id", "content"],
-                  "variable": [
-                    {
-                      "key": "br_id",
-                      "value": "br-456"
-                    }
-                  ]
+                  "path": ["projects"]
                 }
               },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "markdown",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
-                  "value": "text/markdown"
+                  "value": "application/json"
                 }
               ],
               "cookie": [],
-              "body": "# Business Request\n\n## Obiettivi\n\nQuesto documento descrive i requisiti per il nuovo sistema di gestione progetti.\n\n## Requisiti funzionali\n\n1. Il sistema deve permettere la creazione e gestione di progetti\n2. Ogni progetto deve poter avere multiple versioni di business request\n3. Le business request devono essere caricate come file markdown\n\n## Utenti e ruoli\n\nIl sistema prevede i seguenti ruoli:\n\n- Amministratore\n- Project Manager\n- Business Analyst\n- Sviluppatore\n"
+              "body": "{\n  \"id\": \"proj-789\",\n  \"name\": \"Nuovo Progetto\",\n  \"description\": \"Descrizione del nuovo progetto\",\n  \"enabled\": true,\n  \"creation_date\": \"2023-05-18T10:00:00Z\"\n}"
             }
           ]
         },
@@ -213,33 +210,36 @@
           },
           "response": [
             {
-              "name": "File scaricato con successo",
+              "name": "Progetto aggiornato con successo",
               "originalRequest": {
-                "method": "GET",
-                "header": [],
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Progetto Aggiornato\",\n  \"description\": \"Descrizione aggiornata del progetto\"\n}"
+                },
                 "url": {
-                  "raw": "{{baseUrl}}/business-requests/:br_id/content",
+                  "raw": "{{baseUrl}}/projects/proj-123",
                   "host": ["{{baseUrl}}"],
-                  "path": ["business-requests", ":br_id", "content"],
-                  "variable": [
-                    {
-                      "key": "br_id",
-                      "value": "br-456"
-                    }
-                  ]
+                  "path": ["projects", "proj-123"]
                 }
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": "markdown",
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
-                  "value": "text/markdown"
+                  "value": "application/json"
                 }
               ],
               "cookie": [],
-              "body": "# Business Request\n\n## Obiettivi\n\nQuesto documento descrive i requisiti per il nuovo sistema di gestione progetti.\n\n## Requisiti funzionali\n\n1. Il sistema deve permettere la creazione e gestione di progetti\n2. Ogni progetto deve poter avere multiple versioni di business request\n3. Le business request devono essere caricate come file markdown\n\n## Utenti e ruoli\n\nIl sistema prevede i seguenti ruoli:\n\n- Amministratore\n- Project Manager\n- Business Analyst\n- Sviluppatore\n"
+              "body": "{\n  \"id\": \"proj-123\",\n  \"name\": \"Progetto Aggiornato\",\n  \"description\": \"Descrizione aggiornata del progetto\",\n  \"enabled\": true,\n  \"creation_date\": \"2023-05-15T09:00:00Z\",\n  \"last_update\": \"2023-05-18T11:00:00Z\"\n}"
             }
           ]
         },
@@ -264,33 +264,27 @@
           },
           "response": [
             {
-              "name": "File scaricato con successo",
+              "name": "Progetto disabilitato con successo",
               "originalRequest": {
-                "method": "GET",
+                "method": "PATCH",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/business-requests/:br_id/content",
+                  "raw": "{{baseUrl}}/projects/proj-123/disable",
                   "host": ["{{baseUrl}}"],
-                  "path": ["business-requests", ":br_id", "content"],
-                  "variable": [
-                    {
-                      "key": "br_id",
-                      "value": "br-456"
-                    }
-                  ]
+                  "path": ["projects", "proj-123", "disable"]
                 }
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": "markdown",
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
-                  "value": "text/markdown"
+                  "value": "application/json"
                 }
               ],
               "cookie": [],
-              "body": "# Business Request\n\n## Obiettivi\n\nQuesto documento descrive i requisiti per il nuovo sistema di gestione progetti.\n\n## Requisiti funzionali\n\n1. Il sistema deve permettere la creazione e gestione di progetti\n2. Ogni progetto deve poter avere multiple versioni di business request\n3. Le business request devono essere caricate come file markdown\n\n## Utenti e ruoli\n\nIl sistema prevede i seguenti ruoli:\n\n- Amministratore\n- Project Manager\n- Business Analyst\n- Sviluppatore\n"
+              "body": "{\n  \"id\": \"proj-123\",\n  \"enabled\": false,\n  \"disabled_date\": \"2023-05-18T12:00:00Z\"\n}"
             }
           ]
         },
@@ -315,33 +309,27 @@
           },
           "response": [
             {
-              "name": "File scaricato con successo",
+              "name": "Progetto abilitato con successo",
               "originalRequest": {
-                "method": "GET",
+                "method": "PATCH",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/business-requests/:br_id/content",
+                  "raw": "{{baseUrl}}/projects/proj-123/enable",
                   "host": ["{{baseUrl}}"],
-                  "path": ["business-requests", ":br_id", "content"],
-                  "variable": [
-                    {
-                      "key": "br_id",
-                      "value": "br-456"
-                    }
-                  ]
+                  "path": ["projects", "proj-123", "enable"]
                 }
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": "markdown",
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
-                  "value": "text/markdown"
+                  "value": "application/json"
                 }
               ],
               "cookie": [],
-              "body": "# Business Request\n\n## Obiettivi\n\nQuesto documento descrive i requisiti per il nuovo sistema di gestione progetti.\n\n## Requisiti funzionali\n\n1. Il sistema deve permettere la creazione e gestione di progetti\n2. Ogni progetto deve poter avere multiple versioni di business request\n3. Le business request devono essere caricate come file markdown\n\n## Utenti e ruoli\n\nIl sistema prevede i seguenti ruoli:\n\n- Amministratore\n- Project Manager\n- Business Analyst\n- Sviluppatore\n"
+              "body": "{\n  \"id\": \"proj-123\",\n  \"enabled\": true,\n  \"enabled_date\": \"2023-05-18T13:00:00Z\"\n}"
             }
           ]
         }
@@ -372,33 +360,27 @@
           },
           "response": [
             {
-              "name": "File scaricato con successo",
+              "name": "Versioni recuperate con successo",
               "originalRequest": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/business-requests/:br_id/content",
+                  "raw": "{{baseUrl}}/business-requests/project/proj-123/versions",
                   "host": ["{{baseUrl}}"],
-                  "path": ["business-requests", ":br_id", "content"],
-                  "variable": [
-                    {
-                      "key": "br_id",
-                      "value": "br-456"
-                    }
-                  ]
+                  "path": ["business-requests", "project", "proj-123", "versions"]
                 }
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": "markdown",
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
-                  "value": "text/markdown"
+                  "value": "application/json"
                 }
               ],
               "cookie": [],
-              "body": "# Business Request\n\n## Obiettivi\n\nQuesto documento descrive i requisiti per il nuovo sistema di gestione progetti.\n\n## Requisiti funzionali\n\n1. Il sistema deve permettere la creazione e gestione di progetti\n2. Ogni progetto deve poter avere multiple versioni di business request\n3. Le business request devono essere caricate come file markdown\n\n## Utenti e ruoli\n\nIl sistema prevede i seguenti ruoli:\n\n- Amministratore\n- Project Manager\n- Business Analyst\n- Sviluppatore\n"
+              "body": "{\n  \"versions\": [\n    {\n      \"id\": \"br-456\",\n      \"project_id\": \"proj-123\",\n      \"version\": 2,\n      \"file_path\": \"/storage/business-requests/br-456.md\",\n      \"creation_date\": \"2023-05-17T15:30:00Z\",\n      \"is_active\": true\n    },\n    {\n      \"id\": \"br-123\",\n      \"project_id\": \"proj-123\",\n      \"version\": 1,\n      \"file_path\": \"/storage/business-requests/br-123.md\",\n      \"creation_date\": \"2023-05-16T10:00:00Z\",\n      \"is_active\": false\n    }\n  ]\n}"
             }
           ]
         },
@@ -423,33 +405,27 @@
           },
           "response": [
             {
-              "name": "File scaricato con successo",
+              "name": "Business request recuperata con successo",
               "originalRequest": {
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/business-requests/:br_id/content",
+                  "raw": "{{baseUrl}}/business-requests/br-456",
                   "host": ["{{baseUrl}}"],
-                  "path": ["business-requests", ":br_id", "content"],
-                  "variable": [
-                    {
-                      "key": "br_id",
-                      "value": "br-456"
-                    }
-                  ]
+                  "path": ["business-requests", "br-456"]
                 }
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": "markdown",
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
-                  "value": "text/markdown"
+                  "value": "application/json"
                 }
               ],
               "cookie": [],
-              "body": "# Business Request\n\n## Obiettivi\n\nQuesto documento descrive i requisiti per il nuovo sistema di gestione progetti.\n\n## Requisiti funzionali\n\n1. Il sistema deve permettere la creazione e gestione di progetti\n2. Ogni progetto deve poter avere multiple versioni di business request\n3. Le business request devono essere caricate come file markdown\n\n## Utenti e ruoli\n\nIl sistema prevede i seguenti ruoli:\n\n- Amministratore\n- Project Manager\n- Business Analyst\n- Sviluppatore\n"
+              "body": "{\n  \"id\": \"br-456\",\n  \"project_id\": \"proj-123\",\n  \"version\": 2,\n  \"file_path\": \"/storage/business-requests/br-456.md\",\n  \"creation_date\": \"2023-05-17T15:30:00Z\",\n  \"is_active\": true\n}"
             }
           ]
         },
@@ -581,20 +557,14 @@
           },
           "response": [
             {
-              "name": "Operazione riuscita",
+              "name": "Domande generate con successo",
               "originalRequest": {
                 "method": "POST",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/business-requests/:br_id/questions",
+                  "raw": "{{baseUrl}}/business-requests/br-123/questions",
                   "host": ["{{baseUrl}}"],
-                  "path": ["business-requests", ":br_id", "questions"],
-                  "variable": [
-                    {
-                      "key": "br_id",
-                      "value": "br-123"
-                    }
-                  ]
+                  "path": ["business-requests", "br-123", "questions"]
                 }
               },
               "status": "OK",
@@ -637,15 +607,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/business-requests/:br_id/content",
+                  "raw": "{{baseUrl}}/business-requests/br-456/content",
                   "host": ["{{baseUrl}}"],
-                  "path": ["business-requests", ":br_id", "content"],
-                  "variable": [
-                    {
-                      "key": "br_id",
-                      "value": "br-456"
-                    }
-                  ]
+                  "path": ["business-requests", "br-456", "content"]
                 }
               },
               "status": "OK",
@@ -658,7 +622,7 @@
                 }
               ],
               "cookie": [],
-              "body": "# Business Request\n\n## Obiettivi\n\nQuesto documento descrive i requisiti per il nuovo sistema di gestione progetti.\n\n## Requisiti funzionali\n\n1. Il sistema deve permettere la creazione e gestione di progetti\n2. Ogni progetto deve poter avere multiple versioni di business request\n3. Le business request devono essere caricate come file markdown\n\n## Utenti e ruoli\n\nIl sistema prevede i seguenti ruoli:\n\n- Amministratore\n- Project Manager\n- Business Analyst\n- Sviluppatore\n"
+              "body": "# Business Request\n\n## Obiettivi\n\nQuesto documento descrive i requisiti per il nuovo sistema di gestione progetti.\n\n## Requisiti funzionali\n\n1. Il sistema deve permettere la creazione e gestione di progetti\n2. Ogni progetto deve poter avere multiple versioni di business request\n3. Le business request devono essere caricate come file markdown\n\n## Utenti e ruoli\n\nIl sistema prevede i seguenti ruoli:\n\n- Amministratore\n- Project Manager\n- Business Analyst\n- Sviluppatore"
             }
           ]
         }
@@ -674,9 +638,9 @@
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/functional_analysis/:br_id",
+              "raw": "{{baseUrl}}/functional-analysis/:br_id",
               "host": ["{{baseUrl}}"],
-              "path": ["analysis", ":br_id"],
+              "path": ["functional-analysis", ":br_id"],
               "variable": [
                 {
                   "key": "br_id",
@@ -685,7 +649,7 @@
                 }
               ]
             },
-            "description": "Crea un'analisi per una specifica business request"
+            "description": "Crea un'analisi funzionale per una specifica business request"
           },
           "response": [
             {
@@ -694,19 +658,13 @@
                 "method": "POST",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/analysis/:br_id",
+                  "raw": "{{baseUrl}}/functional-analysis/br-123",
                   "host": ["{{baseUrl}}"],
-                  "path": ["analysis", ":br_id"],
-                  "variable": [
-                    {
-                      "key": "br_id",
-                      "value": "br-123"
-                    }
-                  ]
+                  "path": ["functional-analysis", "br-123"]
                 }
               },
-              "status": "OK",
-              "code": 200,
+              "status": "Created",
+              "code": 201,
               "_postman_previewlanguage": "json",
               "header": [
                 {
@@ -715,7 +673,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"status\": \"success\",\n  \"message\": \"Analisi creata con successo\",\n  \"analysis_id\": \"analysis-123\",\n  \"br_id\": \"br-123\"\n}"
+              "body": "{\n  \"status\": \"success\",\n  \"message\": \"Analisi funzionale creata con successo\",\n  \"analysis_id\": \"analysis-123\",\n  \"br_id\": \"br-123\"\n}"
             }
           ]
         }
@@ -751,19 +709,13 @@
                 "method": "POST",
                 "header": [],
                 "url": {
-                  "raw": "{{baseUrl}}/architecture/:br_id",
+                  "raw": "{{baseUrl}}/architecture/br-123",
                   "host": ["{{baseUrl}}"],
-                  "path": ["architecture", ":br_id"],
-                  "variable": [
-                    {
-                      "key": "br_id",
-                      "value": "br-123"
-                    }
-                  ]
+                  "path": ["architecture", "br-123"]
                 }
               },
-              "status": "OK",
-              "code": 200,
+              "status": "Created",
+              "code": 201,
               "_postman_previewlanguage": "json",
               "header": [
                 {
@@ -772,7 +724,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"status\": \"success\",\n  \"message\": \"Analisi architetturale creata con successo\",\n  \"br_id\": \"br-123\"\n}"
+              "body": "{\n  \"status\": \"success\",\n  \"message\": \"Analisi architetturale creata con successo\",\n  \"analysis_id\": \"arch-123\",\n  \"br_id\": \"br-123\"\n}"
             }
           ]
         }

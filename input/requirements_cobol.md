@@ -1,13 +1,47 @@
 # Insurance Policy Processing System Technical Documentation
 
+**Table of Contents**
+
+1. Executive Summary
+2. System Overview
+3. System Architecture
+
+    * 3.1 Architecture Overview
+    * 3.2 Main Components
+    * 3.3 Database Integration
+    * 3.4 Architecture Diagram
+4. Processing Flows
+
+    * 4.1 Policy Processing
+    * 4.2 Premium and Coverage Calculation
+    * 4.3 Geographic Data Management
+    * 4.4 Agency Management
+    * 4.5 Catastrophe Modeling Records
+    * 4.6 Currency Conversion
+5. Data Model
+
+    * 5.1 Main Table Structure
+    * 5.2 Entity Relationships
+    * 5.3 Data Dictionary
+6. Technical Components
+
+    * 6.1 Data Access Modules
+    * 6.2 Date and Time Utilities
+    * 6.3 Calculation Functions
+    * 6.4 Error Management
+7. Integrations
+
+    * 7.1 External Systems
+    * 7.2 Data Interfaces
+8. Glossary
 
 ## 1. Executive Summary
 
-This document provides a detailed technical description of an insurance policy processing system currently implemented in a COBOL mainframe environment, along with requirements for its modernization to a Java-based solution leveraging AWS infrastructure. The system handles various aspects of the policy lifecycle, including creation, modification, retrieval, and calculation of premiums and coverages. The system interacts with multiple databases, including DB2 and IMS, and currently utilizes various COBOL programs and subroutines to implement business logic.
+This document provides a detailed technical description of an insurance policy processing system implemented in a COBOL mainframe environment. The system handles various aspects of the policy lifecycle, including creation, modification, retrieval, and calculation of premiums and coverages. The system interacts with multiple databases, including DB2 and IMS, and utilizes various COBOL programs and subroutines to implement business logic.
 
 The system is designed to handle a variety of policy types and coverage scenarios, including coinsurance, direct and indirect damages, and different risk classes. It incorporates complex calculations to determine premiums, deductibles, and maximum coverage limits based on factors such as location, property type, and sum insured. The system also handles currency conversion and generates records for catastrophe modeling.
 
-This document describes the current system architecture, processing flows, data model, technical components, integrations, and a glossary of terms. It also outlines the requirements for modernizing this legacy COBOL system to a Java-based implementation while maintaining the existing database structure. This documentation serves as a comprehensive resource for developers, business analysts, and other stakeholders involved in both understanding the current system and implementing its modernized version.
+This document describes the system architecture, processing flows, data model, technical components, integrations, and a glossary of terms. It provides a comprehensive understanding of the system and its capabilities, serving as a valuable resource for developers, business analysts, and other stakeholders involved in maintaining and enhancing the system.
 
 ## 2. System Overview
 
@@ -51,11 +85,11 @@ The policy processing system comprises various COBOL modules and components that
     * EDARAF01: Generalized BATCH routine for GN and GHN. Performs database operations on various tables related to insurance policies, including managing cursors and key areas.
 * Data Access Modules: These modules provide access to the system's databases, encapsulating the database interaction logic.
     * ELSRQ014: Retrieves data from the root segment of a technical database based on input criteria.
-    * EDLRFU3A: Retrieves data from the TPT_SOMMA_FATTORE table based on different access methods.
+    * EDLRFU3A: Retrieves data from the TPT\_SOMMA\_FATTORE table based on different access methods.
     * EDLR1F05: Accesses an administrative database to retrieve policy information, specifically the policy's company code.
-    * EDLRWF79: Retrieves a geolocation record from the TUT_GEOLOCALIZZAZIONE table based on provided contract code, component code, and insertion timestamp.
-    * EDLRUF44: Retrieves data from the OSP.TLT_GPERS_CAT_TRAS_RT_OC table based on various input criteria.
-    * EDLRTF52: Reads data from a table named TPT_SOMMA in a DB2 database. Supports random access based on a key and sequential access using a cursor.
+    * EDLRWF79: Retrieves a geolocation record from the TUT\_GEOLOCALIZZAZIONE table based on provided contract code, component code, and insertion timestamp.
+    * EDLRUF44: Retrieves data from the OSP.TLT\_GPERS\_CAT\_TRAS\_RT\_OC table based on various input criteria.
+    * EDLRTF52: Reads data from a table named TPT\_SOMMA in a DB2 database. Supports random access based on a key and sequential access using a cursor.
 * Date and Time Utilities: These modules provide functions for manipulating dates and timestamps, including date validation, date difference calculation, and timestamp generation.
     * IYYCRDA8: Validates a date in 'YYMMDD' format.
     * PLSYUT35: Generates a timestamp by combining the current date and time.
@@ -68,7 +102,7 @@ The policy processing system comprises various COBOL modules and components that
     * KRPD0077: Calculates the risk class of the main risk of an insurance policy.
     * KRPD0339: Calculates the company code and centralized code based on an environment flag.
     * KRPD0418: Retrieves rates, deductibles, limits, and territorial classes based on location and insurance policy details.
-    * KRPM1112: Retrieves information about a location (comune) from the TUT_TERRITORIO table based on provided location name, postal code, and province.
+    * KRPM1112: Retrieves information about a location (comune) from the TUT\_TERRITORIO table based on provided location name, postal code, and province.
     * PLSYUTG0: Rounds a number to a specific number of decimals based on the currency code.
     * PLSYUTG2: Rounds a number to a specific number of decimals (o to 3).
 * Error Handling Modules: These modules handle errors and exceptions, including error logging, abnormal termination handling, and error message display.
@@ -114,9 +148,9 @@ In addition to DB2 and IMS, the system may also interact with other databases an
 
 The data flow within the system is as follows:
 
-1.  **Requests to Policy Processing:** "Online Processing" and "Batch Processing" initiate policy processing by sending requests to the central "Policy Processing" component.
-2.  **Orchestration by Policy Processing:** "Policy Processing" receives these requests and determines the necessary steps to fulfill them. It then calls upon the appropriate specialized COBOL components to perform those steps.
-3.  **Component Interactions:**
+1. **Requests to Policy Processing:** "Online Processing" and "Batch Processing" initiate policy processing by sending requests to the central "Policy Processing" component.
+2. **Orchestration by Policy Processing:** "Policy Processing" receives these requests and determines the necessary steps to fulfill them. It then calls upon the appropriate specialized COBOL components to perform those steps.
+3. **Component Interactions:**
     * "Policy Processing" uses "Calculations" to perform any required mathematical or financial calculations.
     * "Policy Processing" uses "Geographic Data Management" to handle any processing related to location-based information.
     * "Policy Processing" uses "Data Access" to retrieve or store data in the "IMS" or "DB2" databases.
@@ -125,8 +159,8 @@ The data flow within the system is as follows:
     * "Policy Processing" uses "Currency Conversion" to handle any currency-related operations.
     * "Policy Processing" uses "Error Management" to handle any errors that occur during processing.
     * "Policy Processing" uses "Date and Time Utilities" to perform any date or time-related tasks.
-4.  **Database Interaction:** The "Data Access" component is the sole interface between the COBOL programs and the databases. It retrieves data from "IMS" and "DB2" and sends data to be stored in these databases.
-5.  **External System Interaction:** "Online Processing" and "Batch Processing" may also read data from and write data to external systems, although the specifics of these interactions are not detailed in this diagram.
+4. **Database Interaction:** The "Data Access" component is the sole interface between the COBOL programs and the databases. It retrieves data from "IMS" and "DB2" and sends data to be stored in these databases.
+5. **External System Interaction:** "Online Processing" and "Batch Processing" may also read data from and write data to external systems, although the specifics of these interactions are not detailed in this diagram.
 
 Dependencies:
 
@@ -136,19 +170,19 @@ Dependencies:
 
 The workflow for processing insurance policies involves the following steps:
 
-1.  Policy Data Reception: The system receives policy data from various channels, including online applications, agent systems, and batch jobs.
-2.  Data Validation: The policy data is validated to ensure accuracy and integrity. This includes checking for required fields, data formats, and business rules.
-3.  Policy Record Creation: Once the data is validated, policy records are created in the system's databases. This includes creating records in DB2 for the main policy data and in IMS for the technical data.
-4.  Premium Calculation: Premiums are calculated based on the policy parameters, coverage, sum insured, location, and risk class. The system uses various calculation modules to perform these calculations.
-5.  Coinsurance Management: If the policy involves coinsurance, the system calculates each coinsurer's premium share and liability.
-6.  Document Generation: The system generates various policy-related documents, including policies, endorsements, and insurance certificates.
-7.  Policy Record Updates: Policy records are updated to reflect changes to the policy, such as endorsements, renewals, or cancellations.
-8.  Claims Processing: When a claim is filed, the system retrieves the policy data and uses it to assess coverage and process the claim.
+1. Policy Data Reception: The system receives policy data from various channels, including online applications, agent systems, and batch jobs.
+2. Data Validation: The policy data is validated to ensure accuracy and integrity. This includes checking for required fields, data formats, and business rules.
+3. Policy Record Creation: Once the data is validated, policy records are created in the system's databases. This includes creating records in DB2 for the main policy data and in IMS for the technical data.
+4. Premium Calculation: Premiums are calculated based on the policy parameters, coverage, sum insured, location, and risk class. The system uses various calculation modules to perform these calculations.
+5. Coinsurance Management: If the policy involves coinsurance, the system calculates each coinsurer's premium share and liability.
+6. Document Generation: The system generates various policy-related documents, including policies, endorsements, and insurance certificates.
+7. Policy Record Updates: Policy records are updated to reflect changes to the policy, such as endorsements, renewals, or cancellations.
+8. Claims Processing: When a claim is filed, the system retrieves the policy data and uses it to assess coverage and process the claim.
 
 The policy processing workflow is designed to be efficient and accurate, ensuring timely and correct processing of insurance policies.
-The policy processing workflow is designed to be efficient and accurate, ensuring timely and correct processing of insurance policies.
+
 ### 4.2 Premium and Coverage Calculation
-### 4.2 Premium and Coverage Calculation
+
 Premium and coverage calculation is a crucial aspect of the policy processing system. The system uses complex business logic to determine premiums, deductibles, and maximum coverage limits based on various factors. These factors include:
 
 * Policy Type: Different policy types have different premium structures and calculation rules.
@@ -158,9 +192,9 @@ Premium and coverage calculation is a crucial aspect of the policy processing sy
 * Risk Class: The risk class is assigned to the policy based on the insured's risk profile. Higher-risk insureds pay higher premiums.
 
 The system uses a combination of lookup tables, formulas, and business rules to calculate premiums and coverages. The calculation modules retrieve the necessary data from the databases and perform the required calculations. The business logic is designed to be accurate and consistent with the insurance company's underwriting practices.
+
 ### 4.3 Geographic Data Management
-### 4.3 Geographic Data Management
-The policy processing system incorporates geographic data management to determine territorial classes, rates, and coverages based on the location of the insured property. The system uses the following geographic data:
+
 The policy processing system incorporates geographic data management to determine territorial classes, rates, and coverages based on the location of the insured property. The system uses the following geographic data:
 
 * Postal Codes: Postal codes are used to identify specific geographic areas.
@@ -170,9 +204,9 @@ The policy processing system incorporates geographic data management to determin
 The system retrieves the geographic data from the databases and uses it to determine the territorial class of the location. The territorial class is then used to look up the appropriate rates and coverages for the policy. The system may also use geographic data to validate the property's location and ensure it is within the insurer's coverage area.
 
 Geographic data management allows the system to calculate accurate premiums and coverages based on the location of the insured property. It also helps the insurer assess and manage its risk exposure in different geographic regions.
+
 ### 4.4 Agency Management
-### 4.4 Agency Management
-The policy processing system manages the primary and subsidiary agencies that sell insurance policies on behalf of the insurer. The system stores information about each agency, including:
+
 The policy processing system manages the primary and subsidiary agencies that sell insurance policies on behalf of the insurer. The system stores information about each agency, including:
 
 * Agency Code: A unique identifier for the agency.
@@ -185,9 +219,9 @@ The system uses the agency data for various purposes, including:
 * Policy Assignment: Policies are assigned to the agency that sold them.
 * Commission Calculation: Commissions are calculated based on the agency's sales.
 * Report Generation: Reports are generated to track agency performance.
-* Policy Assignment: Policies are assigned to the agency that sold them.
+
 The system allows the insurer to manage its relationships with agencies and track their sales and performance. It also provides data for commission calculation and report generation.
-* Report Generation: Reports are generated to track agency performance.
+
 ### 4.5 Catastrophe Modeling Records
 
 The policy processing system generates records for catastrophe modeling, providing data for risk assessment and disaster management planning. The records contain information about the policies, the insured properties, and the potential perils. The perils covered include:
@@ -201,11 +235,11 @@ The policy processing system generates records for catastrophe modeling, providi
 The records are generated in a specific format that can be used by catastrophe models to estimate potential losses from various catastrophic events. These models help the insurer assess its risk exposure, price policies appropriately, and develop risk management strategies.
 
 Catastrophe modeling record generation is an essential component of the policy processing system, allowing the insurer to proactively manage its risk exposure and ensure its financial sustainability.
-* Currency Conversion Modules: The system uses currency conversion modules to convert amounts from one currency to another. These modules retrieve the exchange rates from the exchange rate table and perform the necessary calculations.
+
 ### 4.6 Currency Conversion
-When processing a policy in a foreign currency, the system converts the relevant amounts, such as the premium, sum insured, and deductibles, to the insurer's base currency. This ensures that all calculations and financial reporting are done in a single currency.
+
 The policy processing system handles currency conversion for policies issued in different currencies. The system uses the following components for currency conversion:
-The currency conversion system is designed to be accurate and reliable, ensuring that currency conversions are performed using the most up-to-date exchange rates. This is essential for maintaining the accuracy of the insurer's financial records.
+
 * Exchange Rate Table: The system maintains an exchange rate table that stores the current exchange rates for different currency pairs.
 * Currency Conversion Modules: The system uses currency conversion modules to convert amounts from one currency to another. These modules retrieve the exchange rates from the exchange rate table and perform the necessary calculations.
 
@@ -213,10 +247,10 @@ When processing a policy in a foreign currency, the system converts the relevant
 
 The currency conversion system is designed to be accurate and reliable, ensuring that currency conversions are performed using the most up-to-date exchange rates. This is essential for maintaining the accuracy of the insurer's financial records.
 
-* TPA\_RADICE: This table stores the basic policy information, including the policy number, policy version, confidentiality level, origin, and timestamps.
-* TPA\_RATA: This table stores information about policy installments, including the policy number, revision key, competence start date, competence end date, timestamps, and status.
+## 5. Data Model
+
 ### 5.1 Main Table Structure
-* TPT\_SOMMA: This table stores information about policy sums, including the policy number, component code, insertion timestamp, revision key, sub-revision key, sum code, program code, territorial extension, sum insured, count code, count amount, count coefficient, deductible amount, uncovered percentage, minimum uncovered, maximum uncovered, main risk, risk category, rate code, rate percentage, unit premium, annual taxable premium amount, accounting class, deductible days, net rate percentage, premium rate type, variable premium amount, policy band partition, user who inserted the record, and sum expiry date.
+
 The policy processing system uses several database tables to store policy data and related information. The key tables include:
 
 * TPA\_RADICE: This table stores the basic policy information, including the policy number, policy version, confidentiality level, origin, and timestamps.
@@ -226,7 +260,7 @@ The policy processing system uses several database tables to store policy data a
 * TUT\_GEOLOCALIZZAZIONE: This table stores geolocation information, including the contract code, component code, insertion timestamp, and other location-related details.
 * OSP.TLT\_GPERS\_CAT\_TRAS\_RT\_OC: This table stores information about risk types, occupation codes, and other policy-related data.
 * TLT\_ITBTABEL: This table stores various reference data, including information about currencies, exchange rates, and other system parameters.
-    * `LIVELLO_CONFID`: VARCHAR (Confidentiality Level)
+
 These tables are interrelated through foreign keys, creating a relational data model that supports the system's functionality. The data model is designed to be efficient and scalable, allowing the system to handle large volumes of policy data.
 
 ### 5.2 Entity Relationships
@@ -357,9 +391,9 @@ These tables are interrelated through foreign keys, creating a relational data m
         * Has a relationship (indicated by a connecting line) with `TPT_SOMMA`, likely a many-to-one relationship where multiple policy sums can be associated with one territorial guarantee code.
 
 This diagram provides a high-level view of the key entities and their relationships within the insurance policy processing system's database schema in DB2. It highlights how policy information is structured and linked to related data such as installments, sums insured, factors, and geographical information.
-    * `NUM_POLIZZA`: INT (Policy Number - likely a foreign key referencing `TPA_RADICE`)
-    * `REVKEY`: INT (Revision Key - possibly part of the primary key or used for tracking changes)
-    * `DATA_INIZ_COMPET`: DATE (Competence Start Date)
+
+### 5.3 Data Dictionary
+
 The policy processing system uses various fields and data structures to represent policy information. The critical fields and data structures include:
 
 * NUM-POLIZZA: The policy number, a unique identifier for each policy.
@@ -380,11 +414,11 @@ The policy processing system uses various fields and data structures to represen
 * CLASSE-TERRITORIALE: The territorial class, which represents the risk associated with a specific geographic location.
 
 These fields and data structures are used throughout the system to capture, process, and store policy information. They are essential to the system's functionality and for ensuring the accuracy and integrity of policy data.
-    * `TMS_INIZIO_VALIDITA`: TIMESTAMP (Start Validity Timestamp)
-    * `TMS_FINE_VALIDITA`: TIMESTAMP (End Validity Timestamp)
-    * `STATO`: VARCHAR (Status)
+
+## 6. Technical Components
+
 ### 6.1 Data Access Modules
-        * Has a relationship (indicated by a connecting line) with `TPA_RADICE`, likely a one-to-many relationship where one policy (`TPA_RADICE`) can have multiple installments (`TPA_RATA`).
+
 The policy processing system uses various data access modules to interact with the databases. These modules encapsulate the data access logic, providing a consistent interface for accessing data from different sources. The key data access modules include:
 
 * ELSRQ014: This module retrieves data from the root segment of a technical database based on input criteria.
@@ -480,88 +514,14 @@ This glossary provides definitions for technical terms and acronyms used in this
 - **Risk Class**: A classification that represents the level of risk associated with an insured or policy.
 - **Coinsurance**: An arrangement where multiple insurers share the risk of a policy.
 - **Catastrophe Modeling**: The process of using computer models to estimate potential losses from catastrophic events.
-- **Currency onversion**: The process of converting amounts from one currency to another.
+- **Currency Conversion**: The process of converting amounts from one currency to another.
 - **Territorial Class**: A classification that represents the risk associated with a specific geographic location.
 - **Guarantee Code**: A code that identifies a specific type of insurance coverage.
 - **Mainframe**: A large, powerful computer that is typically used in large organizations for critical applications.
 
-## 9. Modernization Requirements
+## 9. Appendix
 
-### 9.1 Modernization Objectives
-
-This section outlines the business requirements for modernizing the existing COBOL-based Insurance Policy Processing System to a Java-based solution. The primary objective is to recreate the described system in Java while leveraging AWS infrastructure and maintaining the existing database structure.
-
-#### Key Modernization Goals:
-
-* **Technology Migration**: Transition from COBOL mainframe environment to Java-based architecture
-* **Cloud Adoption**: Leverage AWS infrastructure and services for improved scalability, reliability, and cost-efficiency
-* **Database Continuity**: Maintain the existing DB2 and IMS databases without structural changes
-* **Functional Equivalence**: Ensure all existing business functionality is preserved in the modernized system
-* **Performance Optimization**: Improve system performance and response times
-* **Maintainability**: Enhance code maintainability and reduce technical debt
-
-### 9.2 Technical Approach
-
-#### Java Implementation
-
-* Develop a Java-based application that replicates all functionality of the current COBOL system
-* Implement a layered architecture with clear separation of concerns:
-  * Presentation Layer: Modern web-based UI and/or API interfaces
-  * Business Logic Layer: Java services implementing core business logic
-  * Data Access Layer: Java components for database interaction
-* Utilize modern Java frameworks and libraries (Spring Boot, Hibernate, etc.)
-* Implement comprehensive unit and integration testing
-
-#### AWS Infrastructure
-
-* Deploy the application on AWS using services such as:
-  * Amazon EC2 or ECS for application hosting
-  * Amazon RDS for database connectivity
-  * Amazon S3 for document storage
-  * AWS Lambda for event-driven processing
-  * Amazon CloudWatch for monitoring and logging
-* Implement infrastructure as code using AWS CloudFormation or Terraform
-* Configure auto-scaling and high availability
-
-#### Database Integration
-
-* Maintain the existing DB2 and IMS databases without structural changes
-* Develop Java-based data access components that can interact with the legacy databases
-* Implement connection pooling and efficient query execution
-* Utilize appropriate JDBC drivers and connection strategies
-* Consider implementing a data access abstraction layer to simplify future database migrations
-
-### 9.3 Implementation Constraints
-
-* **Database Preservation**: The existing database structure must be maintained as-is, as recreating the database architecture would be too complex and risky
-* **Business Logic Preservation**: All existing business rules and calculations must be preserved exactly as they function in the current system
-* **Minimal Downtime**: The migration strategy must minimize system downtime and business disruption
-* **Phased Approach**: Consider implementing the modernization in phases to reduce risk
-* **Backward Compatibility**: Ensure the new system can interact with any remaining legacy components during the transition period
-
-### 9.4 Expected Benefits
-
-* **Reduced Maintenance Costs**: Lower costs associated with maintaining legacy COBOL systems and mainframe infrastructure
-* **Improved Agility**: Faster implementation of new features and business requirements
-* **Enhanced Scalability**: Better ability to handle increasing workloads and business growth
-* **Talent Availability**: Access to a larger pool of Java developers compared to COBOL programmers
-* **Modern Integration Capabilities**: Easier integration with modern systems and third-party services
-* **Improved User Experience**: Potential for enhanced user interfaces and self-service capabilities
-* **Cloud Benefits**: Leverage AWS's reliability, security, and cost optimization features
-
-### 9.5 Success Criteria
-
-* Successful migration of all functionality from COBOL to Java
-* Seamless integration with existing databases
-* Equal or improved system performance
-* No loss of data or functionality
-* Minimal business disruption during transition
-* Comprehensive documentation of the new system
-* Knowledge transfer to the maintenance team
-
-## 10. Appendix
-
-### 10.1 Detailed functions descriptions (Sample of only one function, this can be replicated for each one)
+### 9.1 Detailed functions descriptions (Sample of only one function, this can be replicated for each one)
 
 **KRPD0077: Determining the Main Risk Class of an Insurance Policy**
 
