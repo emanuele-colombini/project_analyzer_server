@@ -1,3 +1,5 @@
+from typing import List
+
 from crewai import Agent, Task
 
 from llms import global_llm
@@ -8,11 +10,11 @@ def create_business_analyst():
         role="Business Analyst",
         goal="Analizzare i requisiti del cliente e trasformarli in una documentazione strutturata per il team tecnico",
         backstory="""Sei un esperto Business Analyst con anni di esperienza nell'analisi dei requisiti cliente e nella 
-                loro trasformazione in specifiche comprensibili per i team tecnici. Hai una vasta esperienza in diversi settori 
-                e sai come identificare requisiti impliciti, eliminare ambiguità e strutturare le informazioni in modo chiaro.
-                Sei abile nell'individuare possibili criticità e rischi nei requisiti e nel suggerire soluzioni alternative.
-                Il tuo obiettivo è creare un ponte comunicativo efficace tra le esigenze del cliente e le capacità 
-                implementative del team tecnico.""",
+        loro trasformazione in specifiche comprensibili per i team tecnici. Hai una vasta esperienza in diversi settori 
+        e sai come identificare requisiti impliciti, eliminare ambiguità e strutturare le informazioni in modo chiaro.
+        Sei abile nell'individuare possibili criticità e rischi nei requisiti e nel suggerire soluzioni alternative.
+        Il tuo obiettivo è creare un ponte comunicativo efficace tra le esigenze del cliente e le capacità 
+        implementative del team tecnico.""",
         verbose=True,
         allow_delegation=True,
         llm=global_llm
@@ -21,7 +23,8 @@ def create_business_analyst():
 
 
 def create_functional_analysis_task(
-        business_analyst
+        agent: Agent,
+        output_file_path: str
 ):
     functional_analysis_task = Task(
         description="""Analizza attentamente i requisiti business del cliente forniti in input e produci una 
@@ -69,17 +72,17 @@ def create_functional_analysis_task(
         - Analisi dei rischi e criticità
         - Raccomandazioni per l'implementazione
         """,
-        output_file='output/functional_analysis.md',
-        agent=business_analyst,
+        output_file=output_file_path,
+        agent=agent,
     )
 
     return functional_analysis_task
 
 
-def create_functional_analysis_review_task(
-        business_analyst,
-        functional_analysis_task,
-        product_owner__functional_analysis_review_task
+def create_functional_analysis_final_task(
+        agent: Agent,
+        output_file_path: str,
+        context: List[Task]
 ):
     functional_analysis_review_task = Task(
         description="""Riscrivi completamente l'analisi funzionale tenendo conto del feedback e dei suggerimenti 
@@ -90,9 +93,9 @@ def create_functional_analysis_review_task(
         con gli obiettivi di business. Se la revisione del Product Owner indica che il documento originale è 
         già corretto e completo, riproduci il documento originale senza modifiche. In caso contrario, incorpora 
         tutti i feedback ricevuti per creare una versione migliorata.""",
-        context=[functional_analysis_task, product_owner__functional_analysis_review_task],
-        output_file='output/functional_analysis_reviewed.md',
-        agent=business_analyst
+        context=context,
+        output_file=output_file_path,
+        agent=agent
     )
 
     return functional_analysis_review_task

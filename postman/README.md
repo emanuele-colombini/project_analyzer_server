@@ -36,7 +36,13 @@ La collezione include i seguenti endpoint:
 
 - **GET /business-requests/project/{project_id}/versions**: Ottiene tutte le versioni di una business request per un progetto, ordinate dalla più recente
 - **GET /business-requests/{br_id}**: Ottiene una versione specifica di una business request tramite il suo ID
-- **POST /business-requests**: Crea una nuova versione di una business request (diventa automaticamente la versione attiva)
+- **POST /business-requests**: Crea una nuova versione di una business request caricando un file markdown (diventa automaticamente la versione attiva)
+- **POST /business-requests/{br_id}/questions**: Ottiene domande per una business request
+- **GET /business-requests/{br_id}/content**: Scarica il file markdown di una business request
+
+### Analysis
+
+- **POST /analysis/{br_id}**: Crea un'analisi per una specifica business request
 
 ## Esempi di utilizzo
 

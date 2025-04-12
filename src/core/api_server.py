@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from projects.projects_endpoint import router as projects_router
 from business_requests.br_endpoint import router as br_router
+from functional_analysis.ba_endpoint import router as ba_router
+from architecture.arch_endpoint import router as arch_router
 
 
 class ApiServer:
@@ -24,6 +26,9 @@ class ApiServer:
         
         self.app.include_router(projects_router, tags=["Projects"])
         self.app.include_router(br_router, tags=["Business Requests"])
+        self.app.include_router(ba_router, tags=["Functional Analysis"])
+        self.app.include_router(ba_router, tags=["Functional Analysis"])
+        self.app.include_router(arch_router, tags=["Architecture"])
 
     @staticmethod
     def build() -> 'ApiServer':

@@ -68,3 +68,16 @@ class BusinessRequestEvaluationQuestion(BaseModel):
 class BusinessRequestEvaluationResult(BaseModel):
     """Model representing the complete result of a Business Request evaluation."""
     questions: List[BusinessRequestEvaluationQuestion] = Field([], description="List of evaluation questions")
+
+
+class BusinessRequestEvaluationAnswers(BaseModel):
+    """Model representing a Business Request evaluation question."""
+    id: str = Field(..., description="Question ID (progressively numbered)")
+    area: str = Field(..., description="Question area (name of paragraph/section from original document)")
+    question: str = Field(..., description="Question to ask the client (formulated clearly and concisely)")
+    answer: str = Field(..., description="")
+
+
+class BusinessRequestAnswersResult(BaseModel):
+    """Model representing the complete result of a Business Request evaluation."""
+    answers: List[BusinessRequestEvaluationAnswers] = Field([], description="List of evaluation questions")

@@ -1,6 +1,6 @@
 from crewai import Agent, Task
 
-from business_requests.br_evaluator.models import EvaluationResult
+from business_requests.br_data import BusinessRequestEvaluationResult
 from llms import global_llm
 
 
@@ -28,7 +28,7 @@ def create_solution_owner() -> Agent:
     return solution_owner
 
 
-def create_evaluation_task(agent: Agent, project_name: str) -> Task:
+def create_evaluation_task(agent: Agent, output_file_path: str) -> Task:
     evaluation_task = Task(
         description="""
         Analizza attentamente la seguente Business Request:
@@ -57,7 +57,7 @@ def create_evaluation_task(agent: Agent, project_name: str) -> Task:
             3. Domanda da porre al cliente (formulata in modo chiaro e conciso, mantenendo la lingua identificata dalle business request fornite)
             4. Motivazione della domanda (spiegazione del perché è necessario chiarire questo punto, mantenendo la lingua identificata dalle business request fornite)
         """,
-        output_file=f'output/{project_name}/br_evaluation.json',
-        output_pydantic=EvaluationResult,
+        output_file=output_file_path,
+        output_pydantic=BusinessRequestEvaluationResult,
     )
     return evaluation_task

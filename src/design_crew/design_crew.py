@@ -2,7 +2,7 @@ from crewai import Crew, Process
 from devtools import pprint
 
 from llms import ollama__memory_embedder
-from teams.software_architect import (
+from analysis_crew.team.software_architect import (
     create_software_architect,
     create_microservices_documentation_task,
     create_microservices_documentation_validation_task

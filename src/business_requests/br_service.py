@@ -7,8 +7,15 @@ from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import UploadFile
 
-from business_requests.br_evaluator import br_evaluator
-from business_requests.br_data import BusinessRequestEntity, BusinessRequestModel, BusinessRequestCreate, to_model, to_entity
+from business_requests.br_data import (
+    BusinessRequestEntity,
+    BusinessRequestModel,
+    BusinessRequestCreate,
+    BusinessRequestEvaluationResult,
+    to_model,
+    to_entity
+)
+from business_requests.br_evaluator.crew import create_br_evaluator_crew
 from projects.projects_service import projects_service
 
 
@@ -134,7 +141,7 @@ class BusinessRequestService:
             
         return content
     
-    async def get_questions(self, session: AsyncSession, prj_id: str, br_id: Optional[str] = None) -> Optional[EvaluationResult]:
+    async def create_br_evaluation(self, session: AsyncSession, br_id: Optional[str] = None, force_evaluation: bool = False) -> Optional[BusinessRequestEvaluationResult]:
 
         br = await self.get_version_by_id(session, br_id)
         if not br:
@@ -143,13 +150,23 @@ class BusinessRequestService:
         prj = await projects_service.get_project_by_id(session, br.project_id)
         if not prj:
             return None
-            
-        # Leggi il contenuto del file della business request
-        content = await self.get_file_content(session, br_id)
-        if not content:
+
+        br_content = await self.get_file_content(session, br_id)
+        if not br_content:
             return None
 
-        return br_evaluator.evaluate(project=prj, business_request=br, content=content)
+        output_file_path = f"{prj.project_folder}/output/br_v{br.version}_evaluation.json"
+
+        evaluator_crew = create_br_evaluator_crew(output_file_path=output_file_path)
+
+        result = evaluator_crew.kickoff(inputs={
+            "business_request": br_content
+        })
+
+        return result.pydantic
+
+    async def received_answers(self):
+        pass
 
 
 # Singleton instance

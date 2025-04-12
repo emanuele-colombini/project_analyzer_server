@@ -10,7 +10,7 @@ from business_requests.br_evaluator.team.solution_owner import create_solution_o
 from llms import ollama__memory_embedder
 
 
-def create_br_evaluator_crew(project_name: str) -> Crew:
+def create_br_evaluator_crew(output_file_path: str) -> Crew:
 
     # Agents
     solution_owner = create_solution_owner()
@@ -24,7 +24,7 @@ def create_br_evaluator_crew(project_name: str) -> Crew:
     # Tasks
     evaluation_task = create_evaluation_task(
         agent=solution_owner,
-        project_name=project_name
+        output_file_path=output_file_path
     )
 
     # Crew

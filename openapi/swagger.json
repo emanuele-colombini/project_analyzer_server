@@ -413,7 +413,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/BusinessRequestEvaluationResult"
                 }
               }
             }
@@ -592,6 +592,40 @@
           }
         },
         "required": ["project_id"]
+      },
+      "BusinessRequestEvaluationQuestion": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Question ID (progressively numbered)"
+          },
+          "area": {
+            "type": "string",
+            "description": "Question area (name of paragraph/section from original document)"
+          },
+          "question": {
+            "type": "string",
+            "description": "Question to ask the client (formulated clearly and concisely)"
+          },
+          "motivation": {
+            "type": "string",
+            "description": "Question motivation (explanation of why this point needs clarification)"
+          }
+        },
+        "required": ["id", "area", "question", "motivation"]
+      },
+      "BusinessRequestEvaluationResult": {
+        "type": "object",
+        "properties": {
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BusinessRequestEvaluationQuestion"
+            },
+            "description": "List of evaluation questions"
+          }
+        }
       },
       "Error": {
         "type": "object",

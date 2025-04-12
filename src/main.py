@@ -40,18 +40,18 @@ async def main():
     # analysis_crew = AnalysisCrew()
     # analysis_crew.generate_analysis(requirements)
 
-    # analysis = read_analysis()
+    # functional = read_analysis()
 
     # design_crew = DesignCrew()
     # design_crew.generate_design(
-    #     architectural_assessment=analysis.architecture_assessment,
-    #     functional_analysis=analysis.functional_analysis,
-    #     technical_analysis=analysis.technical_analysis
+    #     architectural_assessment=functional.architecture_assessment,
+    #     functional_analysis=functional.functional_analysis,
+    #     technical_analysis=functional.technical_analysis
     # )
 
-    # analysis = read_analysis()
+    # functional = read_analysis()
     # epic_crew = EpicCrew()
-    # result = epic_crew.generate_epic(analysis)
+    # result = epic_crew.generate_epic(functional)
 
     # BR Evaluator
     # br_evaluator_crew = create_br_evaluator_crew()

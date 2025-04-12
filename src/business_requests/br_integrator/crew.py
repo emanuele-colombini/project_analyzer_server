@@ -1,12 +1,12 @@
 from crewai import Crew, Process
 
-from br_integrator.team.business_analyst import create_business_analyst
-from br_integrator.team.frontend_developer import create_frontend_developer
-from br_integrator.team.java_developer import create_java_developer
-from br_integrator.team.project_manager import create_project_manager
-from br_integrator.team.python_developer import create_python_developer
-from br_integrator.team.software_architect import create_software_architect
-from br_integrator.team.solution_owner import create_solution_owner, create_integration_task
+from business_requests.br_integrator.team.business_analyst import create_business_analyst
+from business_requests.br_integrator.team.frontend_developer import create_frontend_developer
+from business_requests.br_integrator.team.java_developer import create_java_developer
+from business_requests.br_integrator.team.project_manager import create_project_manager
+from business_requests.br_integrator.team.python_developer import create_python_developer
+from business_requests.br_integrator.team.software_architect import create_software_architect
+from business_requests.br_integrator.team.solution_owner import create_solution_owner, create_integration_task
 from llms import ollama__memory_embedder
 
 

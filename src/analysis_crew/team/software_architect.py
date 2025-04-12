@@ -20,8 +20,9 @@ def create_software_architect():
 
 
 def create_architectural_assessment_task(
-        software_architect,
-        functional_analysis_task
+        agent: Agent,
+        output_file_path: str,
+        context: List[Task]
 ):
     architectural_assessment_task = Task(
         description="""Analizza attentamente il documento di analisi funzionale fornito e produci una valutazione architetturale che:
@@ -60,17 +61,17 @@ def create_architectural_assessment_task(
         d. Scalabilità futura
 
         Il documento deve fornire una base solida per la successiva analisi tecnica dettagliata.""",
-        context=[functional_analysis_task],
-        output_file='output/architectural_assessment.md',
-        agent=software_architect,
+        context=context,
+        output_file=output_file_path,
+        agent=agent,
     )
     return architectural_assessment_task
 
 
 def create_technical_analysis_task(
-        software_architect,
-        functional_analysis_task,
-        architectural_assessment_task
+        agent: Agent,
+        output_file_path: str,
+        context: List[Task]
 ):
     technical_analysis_task = Task(
         description="""Analizza attentamente il documento di analisi funzionale fornito e produci un'analisi tecnica che:
@@ -108,18 +109,18 @@ def create_technical_analysis_task(
         10. Linee guida per lo sviluppo
 
         Il documento deve essere sufficientemente dettagliato da permettere la creazione di user stories o task per un backlog di sviluppo.""",
-        context=[functional_analysis_task, architectural_assessment_task],
-        output_file='output/technical_analysis.md',
-        agent=software_architect,
+        context=context,
+        output_file=output_file_path,
+        agent=agent,
     )
 
     return technical_analysis_task
 
 
-def create_architectural_assessment_review_task(
-        software_architect,
-        architectural_assessment_task,
-        product_owner__architectural_assessment_review_task
+def create_architectural_assessment_final_task(
+        agent: Agent,
+        output_file_path: str,
+        context: List[Task]
 ):
     architectural_assessment_review_task = Task(
         description="""Riscrivi completamente la valutazione architetturale tenendo conto del feedback e dei suggerimenti
@@ -130,18 +131,18 @@ def create_architectural_assessment_review_task(
         allineamento con gli obiettivi di business. Se la revisione del Product Owner indica che il documento originale è 
         già corretto e completo, riproduci il documento originale senza modifiche. In caso contrario, incorpora 
         tutti i feedback ricevuti per creare una versione migliorata.""",
-        context=[architectural_assessment_task, product_owner__architectural_assessment_review_task],
-        output_file='output/architectural_assessment_reviewed.md',
-        agent=software_architect
+        context=context,
+        output_file=output_file_path,
+        agent=agent
     )
 
     return architectural_assessment_review_task
 
 
-def create_technical_analysis_review_task(
-        software_architect,
-        technical_analysis_task,
-        product_owner__technical_analysis_review_task
+def create_technical_analysis_final_task(
+        agent: Agent,
+        output_file_path: str,
+        context: List[Task]
 ):
     technical_analysis_review_task = Task(
         description="""Riscrivi completamente l'analisi tecnica tenendo conto del feedback e dei suggerimenti 
@@ -153,9 +154,9 @@ def create_technical_analysis_review_task(
         allineamento con gli obiettivi di business. Se la revisione del Product Owner indica che il documento originale è 
         già corretto e completo, riproduci il documento originale senza modifiche. In caso contrario, incorpora 
         tutti i feedback ricevuti per creare una versione migliorata.""",
-        context=[technical_analysis_task, product_owner__technical_analysis_review_task],
-        output_file='output/technical_analysis_reviewed.md',
-        agent=software_architect
+        context=context,
+        output_file=output_file_path,
+        agent=agent
     )
 
     return technical_analysis_review_task

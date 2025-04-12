@@ -53,7 +53,7 @@ async def create_version(project_id: str = Form(...), file: UploadFile = File(..
 @router.post("/{br_id}/questions", response_model=BusinessRequestEvaluationResult)
 async def get_questions(br_id: str, db: AsyncSession = Depends(get_db)):
     """Get questions for a specific version of a business request"""
-    result = await br_service.get_questions(db, br_id)
+    result = await br_service.create_br_evaluation(db, br_id)
     if not result:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
